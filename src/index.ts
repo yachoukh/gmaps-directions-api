@@ -94,7 +94,7 @@ function addPolyline(directionResult: google.maps.DirectionsResult) {
   const latlngs = polyline.decode(polylinePath);
 
   for (let i = 0; i < latlngs.length; i++) {
-    if (i % 5 == 0) {
+    if (i % 2 == 0) {
       addMarker(new google.maps.LatLng(latlngs[i][0], latlngs[i][1]));
     }
   }
