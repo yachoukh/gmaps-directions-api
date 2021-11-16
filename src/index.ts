@@ -19,11 +19,9 @@ import './style.css';
 var polyline = require('google-polyline');
 
 let map: google.maps.Map;
-let markers: google.maps.Marker[] = [];
+let markerArray: google.maps.Marker[] = [];
 
 function initMap(): void {
-  const markerArray: google.maps.Marker[] = [];
-
   // Instantiate a directions service.
   const directionsService = new google.maps.DirectionsService();
 
@@ -73,37 +71,40 @@ function calculateAndDisplayRoute(
       // Route the directions and pass the response to a function to create
       // markers for each step.
       directionsRenderer.setDirections(result);
-      addPolyline(result, map);
+      addPolyline(result);
     })
     .catch((e) => {
       window.alert('Directions request failed due to ' + e);
     });
 }
 
-function addPolyline(
-  directionResult: google.maps.DirectionsResult,
-  map: google.maps.Map
-) {
+function addPolyline(directionResult: google.maps.DirectionsResult) {
   const polylinePath = directionResult.routes[0].overview_polyline;
   const latlngs = polyline.decode(polylinePath);
 
   let i, marker;
 
   for (i = 0; i < latlngs.length; i++) {
-    marker = new google.maps.Marker({
-      position: new google.maps.LatLng(latlngs[i][0], latlngs[i][1]),
-    });
-
-    marker.setMap(null);
+    addMarker(new google.maps.LatLng(latlngs[i][0], latlngs[i][1]));
   }
 
-  console.log(latlngs);
+  //console.log(latlngs);
+}
+
+// Adds a marker to the map and push to the array.
+function addMarker(position: google.maps.LatLng | google.maps.LatLngLiteral) {
+  const marker = new google.maps.Marker({
+    position,
+    map,
+  });
+
+  markerArray.push(marker);
 }
 
 // Sets the map on all markers in the array.
 function setMapOnAll(map: google.maps.Map | null) {
-  for (let i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
+  for (let i = 0; i < markerArray.length; i++) {
+    markerArray[i].setMap(map);
   }
 }
 
@@ -120,7 +121,7 @@ function showMarkers(): void {
 // Deletes all markers in the array by removing references to them.
 function deleteMarkers(): void {
   hideMarkers();
-  markers = [];
+  markerArray = [];
 }
 
 export { initMap };
