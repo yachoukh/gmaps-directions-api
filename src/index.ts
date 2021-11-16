@@ -29,7 +29,7 @@ function initMap(): void {
     document.getElementById('map') as HTMLElement,
     {
       zoom: 13,
-      center: { lat: 40.771, lng: -73.974 },
+      center: { lat: 33.9854893, lng: -5.1813223 },
     }
   );
 
@@ -148,17 +148,11 @@ function addPolyline(
   map: google.maps.Map
 ) {
   const polylinePath = directionResult.routes[0].overview_polyline;
-
   const latlngs = polyline.decode(polylinePath);
 
   let i, marker;
 
-  for (i = 0; i < latlngs.length; i++) {
-    marker = new google.maps.Marker({
-      position: new google.maps.LatLng(latlngs[i][0], latlngs[i][1]),
-      map: map,
-    });
-  }
+  for (i = 0; i < latlngs.length; i++) {}
 
   console.log(latlngs);
 }
