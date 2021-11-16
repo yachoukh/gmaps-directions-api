@@ -92,7 +92,7 @@ module.exports = (env) => {
       liveReload: true,
       host: '0.0.0.0',
       hot: false,
-      watchContentBase: true,
+      watchContentBase: true
     },
     externals: {
       // use cdn version of ThreeJS to avoid tree shaking complexity
