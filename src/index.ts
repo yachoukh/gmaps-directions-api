@@ -82,13 +82,11 @@ function addPolyline(directionResult: google.maps.DirectionsResult) {
   const polylinePath = directionResult.routes[0].overview_polyline;
   const latlngs = polyline.decode(polylinePath);
 
-  let i, marker;
-
-  for (i = 0; i < latlngs.length; i++) {
+  for (let i = 0; i < latlngs.length; i++) {
     addMarker(new google.maps.LatLng(latlngs[i][0], latlngs[i][1]));
   }
 
-  //console.log(latlngs);
+  console.log(latlngs);
 }
 
 // Adds a marker to the map and push to the array.
