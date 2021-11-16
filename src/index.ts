@@ -18,6 +18,9 @@ import './style.css';
 
 var polyline = require('google-polyline');
 
+let map: google.maps.Map;
+let markers: google.maps.Marker[] = [];
+
 function initMap(): void {
   const markerArray: google.maps.Marker[] = [];
 
@@ -47,26 +50,6 @@ function initMap(): void {
     stepDisplay,
     map
   );
-
-  // Listen to change events from the start and end lists.
-  const onChangeHandler = function () {
-    calculateAndDisplayRoute(
-      directionsRenderer,
-      directionsService,
-      markerArray,
-      stepDisplay,
-      map
-    );
-  };
-
-  (document.getElementById('start') as HTMLElement).addEventListener(
-    'change',
-    onChangeHandler
-  );
-  (document.getElementById('end') as HTMLElement).addEventListener(
-    'change',
-    onChangeHandler
-  );
 }
 
 function calculateAndDisplayRoute(
@@ -95,52 +78,11 @@ function calculateAndDisplayRoute(
       (document.getElementById('warnings-panel') as HTMLElement).innerHTML =
         '<b>' + result.routes[0].warnings + '</b>';
       directionsRenderer.setDirections(result);
-      showSteps(result, markerArray, stepDisplay, map);
       addPolyline(result, map);
     })
     .catch((e) => {
       window.alert('Directions request failed due to ' + e);
     });
-}
-
-function showSteps(
-  directionResult: google.maps.DirectionsResult,
-  markerArray: google.maps.Marker[],
-  stepDisplay: google.maps.InfoWindow,
-  map: google.maps.Map
-) {
-  // For each step, place a marker, and add the text to the marker's infowindow.
-  // Also attach the marker to an array so we can keep track of it and remove it
-  // when calculating new routes.
-  const myRoute = directionResult!.routes[0]!.legs[0]!;
-
-  for (let i = 0; i < myRoute.steps.length; i++) {
-    const marker = (markerArray[i] =
-      markerArray[i] || new google.maps.Marker());
-
-    marker.setMap(map);
-    marker.setPosition(myRoute.steps[i].start_location);
-    attachInstructionText(
-      stepDisplay,
-      marker,
-      myRoute.steps[i].instructions,
-      map
-    );
-  }
-}
-
-function attachInstructionText(
-  stepDisplay: google.maps.InfoWindow,
-  marker: google.maps.Marker,
-  text: string,
-  map: google.maps.Map
-) {
-  google.maps.event.addListener(marker, 'click', () => {
-    // Open an info window when the marker is clicked on, containing the text
-    // of the step.
-    stepDisplay.setContent(text);
-    stepDisplay.open(map, marker);
-  });
 }
 
 function addPolyline(
@@ -152,9 +94,38 @@ function addPolyline(
 
   let i, marker;
 
-  for (i = 0; i < latlngs.length; i++) {}
+  for (i = 0; i < latlngs.length; i++) {
+    marker = new google.maps.Marker({
+      position: new google.maps.LatLng(latlngs[i][0], latlngs[i][1]),
+    });
+
+    marker.setMap(null);
+  }
 
   console.log(latlngs);
+}
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map: google.maps.Map | null) {
+  for (let i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function hideMarkers(): void {
+  setMapOnAll(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers(): void {
+  setMapOnAll(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers(): void {
+  hideMarkers();
+  markers = [];
 }
 
 export { initMap };
