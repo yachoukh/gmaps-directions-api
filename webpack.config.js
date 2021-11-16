@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-require("dotenv").config({});
+require('dotenv').config({});
 
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlReplaceWebpackPlugin = require("html-replace-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env) => {
   return {
-    entry: ["./src/index.ts"],
+    entry: ['./src/index.ts'],
     module: {
       rules: [
         {
           test: /\.(ts|js)$/,
-          loader: "string-replace-loader",
+          loader: 'string-replace-loader',
           options: {
             search: /YOUR_API_KEY/g,
             replace: process.env.GOOGLE_MAPS_API_KEY,
@@ -37,44 +37,44 @@ module.exports = (env) => {
           test: /\.js$/i,
           exclude: /node_modules/,
           use: {
-            loader: "babel-loader",
+            loader: 'babel-loader',
             options: {
-              presets: [["@babel/preset-env", { targets: "defaults" }]],
+              presets: [['@babel/preset-env', { targets: 'defaults' }]],
             },
           },
         },
         {
           test: /\.tsx?$/i,
-          loader: "ts-loader",
+          loader: 'ts-loader',
           exclude: /node_modules/,
           options: {
             compilerOptions: {
-              jsx: "react",
+              jsx: 'react',
             },
           },
         },
         {
           test: /\.css$/i,
           exclude: /node_modules/,
-          use: [MiniCssExtractPlugin.loader, "css-loader"],
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
       ],
     },
     resolve: {
-      extensions: [".ts", ".js"],
+      extensions: ['.ts', '.js'],
     },
     output: {
       path: `${__dirname}/public`,
-      publicPath: "/",
-      filename: "index.js",
-      libraryTarget: "window",
+      publicPath: '/',
+      filename: 'index.js',
+      libraryTarget: 'window',
     },
     plugins: [].concat(
       env.SKIP_HTML
         ? []
         : [
             new HtmlWebpackPlugin({
-              template: "src/index.html",
+              template: 'src/index.html',
               inject: false,
             }),
             new HtmlReplaceWebpackPlugin([
@@ -84,18 +84,18 @@ module.exports = (env) => {
               },
             ]),
             new MiniCssExtractPlugin({
-              filename: "style.css",
+              filename: 'style.css',
             }),
           ]
     ),
     devServer: {
       liveReload: true,
-      host: "0.0.0.0",
-      hot: false,
+      host: '0.0.0.0',
+      hot: true,
     },
     externals: {
       // use cdn version of ThreeJS to avoid tree shaking complexity
-      three: "THREE",
+      three: 'THREE',
     },
   };
 };
