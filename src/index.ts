@@ -132,3 +132,6 @@ function deleteMarkers(): void {
   hideMarkers();
   markerArray = [];
 }
+
+export { initMap };
+
