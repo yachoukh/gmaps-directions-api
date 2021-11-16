@@ -45,6 +45,17 @@ function initMap(): void {
     stepDisplay,
     map
   );
+
+  // add event listeners for the buttons
+  document
+    .getElementById('show-markers')!
+    .addEventListener('click', showMarkers);
+  document
+    .getElementById('hide-markers')!
+    .addEventListener('click', hideMarkers);
+  document
+    .getElementById('delete-markers')!
+    .addEventListener('click', deleteMarkers);
 }
 
 function calculateAndDisplayRoute(
@@ -121,5 +132,3 @@ function deleteMarkers(): void {
   hideMarkers();
   markerArray = [];
 }
-
-export { initMap };
