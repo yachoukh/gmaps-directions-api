@@ -16,7 +16,7 @@
 /* eslint-disable no-undef, @typescript-eslint/no-unused-vars, no-unused-vars */
 import './style.css';
 
-var polyline = require('google-polyline');
+let polyline = require('google-polyline');
 
 let map: google.maps.Map;
 let markerArray: google.maps.Marker[] = [];
@@ -65,7 +65,7 @@ function calculateAndDisplayRoute(
     .route({
       origin: { lat: 33.9854893, lng: -5.1813223 },
       destination: { lat: 33.8810713, lng: -5.5730396 },
-      travelMode: google.maps.TravelMode.WALKING,
+      travelMode: google.maps.TravelMode.DRIVING,
     })
     .then((result: google.maps.DirectionsResult) => {
       // Route the directions and pass the response to a function to create
