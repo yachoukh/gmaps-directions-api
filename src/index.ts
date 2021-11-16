@@ -28,13 +28,10 @@ function initMap(): void {
   const directionsService = new google.maps.DirectionsService();
 
   // Create a map and center it on Manhattan.
-  const map = new google.maps.Map(
-    document.getElementById('map') as HTMLElement,
-    {
-      zoom: 13,
-      center: { lat: 33.9854893, lng: -5.1813223 },
-    }
-  );
+  map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
+    zoom: 13,
+    center: { lat: 33.9854893, lng: -5.1813223 },
+  });
 
   // Create a renderer for directions and bind it to the map.
   const directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
@@ -75,8 +72,6 @@ function calculateAndDisplayRoute(
     .then((result: google.maps.DirectionsResult) => {
       // Route the directions and pass the response to a function to create
       // markers for each step.
-      (document.getElementById('warnings-panel') as HTMLElement).innerHTML =
-        '<b>' + result.routes[0].warnings + '</b>';
       directionsRenderer.setDirections(result);
       addPolyline(result, map);
     })
